@@ -161,6 +161,7 @@ const HeaderDiv = styled.div`
         background-color: rgba(0, 0, 0, 0.75);
         top: 0;
         left: 0;
+        z-index: 1;
 
         .menu-list{
             width: 250px;
