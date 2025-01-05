@@ -9,10 +9,11 @@
   padding: 0;
   box-sizing: border-box;
 }
-h1{
+h1, p{
   font-family: "Kumbh Sans", serif;
 }
 #root{
   width: 100%;
   min-height: 100vh;
+  position: relative;
 }
