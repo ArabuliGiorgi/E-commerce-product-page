@@ -1,4 +1,4 @@
-import { ProductDiv } from "../styled-components.tsx/ProductStyle";
+import { ProductDiv } from "../styled-components/ProductStyle";
 import { useProductContext } from "../contexts/productContext";
 import { useState } from "react";
 import PictureViewer from "./PictureViewer";

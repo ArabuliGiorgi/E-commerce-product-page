@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from "react";
 import { useProductContext } from "../contexts/productContext";
-import { PicViewer } from "../styled-components.tsx/PictureViewer";
+import { PicViewer } from "../styled-components/PictureViewer";
 
 function PictureViewer({ind, children, popup, setPicViewer, picNumber, setPicNumber}: 
     {

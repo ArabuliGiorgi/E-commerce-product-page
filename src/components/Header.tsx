@@ -1,4 +1,4 @@
-import { HeaderDiv, MobileMenu } from "../styled-components.tsx/HeaderStyle";
+import { HeaderDiv, MobileMenu } from "../styled-components/HeaderStyle";
 import { useEffect, useState } from "react";
 import MenuIcon from "/images/icon-menu.svg"
 import Logo from "/images/logo.svg"
