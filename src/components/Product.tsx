@@ -1,30 +1,14 @@
-import { PicViewer, ProductDiv } from "../styled-components.tsx/ProductStyle";
-import { myContext } from "../App"
-import { useContext, useState } from "react";
-import previous from "/images/icon-previous.svg"
-import next from "/images/icon-next.svg"
+import { ProductDiv } from "../styled-components.tsx/ProductStyle";
+import { useProductContext } from "../contexts/productContext";
+import { useState } from "react";
+import PictureViewer from "./PictureViewer";
 
 export default function Product(){
-    const {inCart, setInCart, data} = useContext(myContext);
+    const {inCart, setInCart, data} = useProductContext();
     const [picNumber, setPicNumber] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [picViewer, setPicViewer] = useState(false);
 
-    function handlePicChange(str: string){
-        if(str === "previous"){
-            if(picNumber === 0){
-                setPicNumber(data.products[0].pictures.length - 1);
-            }else{
-                setPicNumber(picNumber - 1);
-            }
-        }else{
-            if(picNumber === data.products[0].pictures.length - 1){
-                setPicNumber(0);
-            }else{
-                setPicNumber(picNumber + 1);
-            }
-        }
-    }
     function handleQuantChange(str: string){
         if(str === "plus"){
             setQuantity(quantity + 1);
@@ -37,9 +21,9 @@ export default function Product(){
     function handleAddToCart(){
         if(quantity === 0)
             return;
-        let obj = inCart.find((element) => element.id === data.products[0].id);
+        const obj = inCart.find((element) => element.id === data.products[0].id);
         if(obj !== undefined){
-            let newArr = inCart.filter(el => el.id !== obj.id);
+            const newArr = inCart.filter(el => el.id !== obj.id);
             obj.quantity += quantity;
             setInCart([...newArr, obj]);
         }else{
@@ -51,25 +35,7 @@ export default function Product(){
     return (
         <>
             <ProductDiv>
-                <div className="pictures-div">
-                    <img src={data.products[0].pictures[picNumber]} alt="picture" className="product-img" onClick={() => setPicViewer(true)}/>
-                    <div className="previous flex desktop:hidden" onClick={() => handlePicChange("previous")}>
-                        <img src={previous} alt="previous" />
-                    </div>
-                    <div className="next flex desktop:hidden" onClick={() => handlePicChange("next")}>
-                        <img src={next} alt="next" />
-                    </div>
-                    <div className="thumbnails hidden desktop:flex">
-                        {data.products[0].thumbnails.map((thumbnail) => {
-                            const index = data.products[0].thumbnails.indexOf(thumbnail);
-
-                            return <div className="thumbnail-div" key={index}>
-                                <div id="active-thumbnail" className={`${index === picNumber ? 'blcok' : 'hidden'}`}></div>
-                                <img src={thumbnail} alt="thumbnail" onClick={() => setPicNumber(index)}/>
-                            </div>
-                        })}
-                    </div>
-                </div>
+                <PictureViewer ind={0} children={null} popup={false} setPicViewer={setPicViewer} picNumber={picNumber} setPicNumber={setPicNumber}/>
                 <div className="details-div">
                     <h1 className="company-font">{data.products[0].company.toUpperCase()}</h1>
                     <h1 className="product-name">{data.products[0].name}</h1>
@@ -104,40 +70,16 @@ export default function Product(){
                     </div>
                 </div>
             </ProductDiv>
-            <PicViewer picviewer={`${picViewer}`}>
-                <div className="main">
+            {picViewer ? 
+                <PictureViewer ind={0} popup={true} setPicViewer={setPicViewer} picNumber={picNumber} setPicNumber={setPicNumber}>
                     <div className="cross" onClick={() => setPicViewer(false)}>
                         <svg viewBox="0 0 14 15" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                             <path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" className="fill-svg" fillRule="evenodd"/>
                         </svg>
                     </div>
-                    <div className="main-image-div">
-                        <img src={data.products[0].pictures[picNumber]} alt="product image" className="main-image"/>
-                        <div className="previous" onClick={() => handlePicChange("previous")}>
-                            <svg width="12" height="18" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 1 3 9l8 8" className="svg-stroke" strokeWidth="3" fill="none" fillRule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div className="next" onClick={() => handlePicChange("next")}>
-                            <svg width="13" height="18" xmlns="http://www.w3.org/2000/svg">
-                                <path d="m2 1 8 8-8 8" className="svg-stroke" strokeWidth="3" fill="none" fillRule="evenodd"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div className="thumbnails">
-                        {data.products[0].thumbnails.map((thumbnail) => {
-                            const index = data.products[0].thumbnails.indexOf(thumbnail);
-
-                            return <div className="thumbnail-div" key={index}>
-                                <div id="active-thumbnail" className={`${index === picNumber ? 'blcok' : 'hidden'}`}></div>
-                                <div className="thumbnail-image" onClick={() => setPicNumber(index)}>
-                                    <img src={thumbnail} alt="thumbnail" />
-                                </div>
-                            </div>
-                        })}
-                    </div>
-                </div>
-            </PicViewer>
+                </PictureViewer>
+                :   null
+            }
         </>
     )
 }
